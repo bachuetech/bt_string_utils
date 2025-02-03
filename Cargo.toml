@@ -6,9 +6,9 @@ authors = ["calvarez <calvarez@bachuetech.biz>"]
 description = "Basic string operations"
 keywords = ["strings","split"]
 categories = ["value-formatting", "development-tools"]
-repository = "https://github.com/bachuetech/"
+repository = "https://github.com/bachuetech/bt_string_utils"
 readme = "README.md"
-homepage = "https://github.com/bachuetech/"
+homepage = "https://github.com/bachuetech/bt_string_utils"
 license = "GPL-3.0-only"
 
 
