@@ -1,7 +1,7 @@
 [package]
 name = "bt_string_utils"
-version = "0.1.0"
-edition = "2021"
+version = "0.2.0"
+edition = "2024"
 authors = ["calvarez <calvarez@bachuetech.biz>"]
 description = "Basic string operations"
 keywords = ["strings","split"]
