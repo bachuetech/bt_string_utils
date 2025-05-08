@@ -105,3 +105,45 @@ pub fn find_value_by_key(kv_pairs: &Vec<String>, key_to_find: &str) -> Option<St
     None
 }
 
+/// Removes the first or last character of a string if it matches the given target character.
+///
+/// # Arguments
+///
+/// * `begin` - A boolean indicating whether to remove the first (`true`) or last (`false`) character.
+/// * `input` - A `String` to process.
+/// * `target` - The character to remove.
+///
+/// # Returns
+///
+/// Returns a new `String` with the character removed if it matched.
+///
+/// # Examples
+///
+/// ```
+/// use bt_string_utils::remove_char;
+/// let modified = remove_char(true, "hello".to_string(), 'h');
+/// assert_eq!(modified, "ello");
+///
+/// let modified = remove_char(false, "world!".to_string(), '!');
+/// assert_eq!(modified, "world");
+/// ```
+///
+/// If the character doesn't match, the original string is returned:
+///
+/// ```
+/// use bt_string_utils::remove_char;
+/// let modified = remove_char(true, "rust".to_string(), 'x');
+/// assert_eq!(modified, "rust");
+/// ```
+pub fn remove_char(begin: bool, input: String, target: char) -> String {
+    if begin {
+        if input.starts_with(target) {
+            return input.chars().skip(1).collect();
+        }
+    } else {
+        if input.ends_with(target) {
+            return input.chars().take(input.len() - 1).collect();
+        }
+    }
+    input // Return unchanged if no removal occurs
+}
