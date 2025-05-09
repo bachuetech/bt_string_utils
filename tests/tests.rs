@@ -53,23 +53,23 @@ mod strings_test{
 
 #[cfg(test)]
 mod removed_tests {
-    use bt_string_utils::remove_char;
+    use bt_string_utils::{remove_char, RemoveLocationEnum};
 
     #[test]
     fn test_remove_first_char() {
-        assert_eq!(remove_char(true, "hello".to_string(), 'h'), "ello");
-        assert_eq!(remove_char(true, "rust".to_string(), 'r'), "ust");
+        assert_eq!(remove_char(RemoveLocationEnum::Begin, &"hello".to_string(), 'h'), "ello");
+        assert_eq!(remove_char(RemoveLocationEnum::Begin, &"rust".to_string(), 'r'), "ust");
     }
 
     #[test]
     fn test_remove_last_char() {
-        assert_eq!(remove_char(false, "world!".to_string(), '!'), "world");
-        assert_eq!(remove_char(false, "test".to_string(), 't'), "tes");
+        assert_eq!(remove_char(RemoveLocationEnum::End, &"world!".to_string(), '!'), "world");
+        assert_eq!(remove_char(RemoveLocationEnum::End, &"test".to_string(), 't'), "tes");
     }
 
     #[test]
     fn test_no_removal() {
-        assert_eq!(remove_char(true, "rust".to_string(), 'x'), "rust");
-        assert_eq!(remove_char(false, "mars".to_string(), 'z'), "mars");
+        assert_eq!(remove_char(RemoveLocationEnum::Begin, &"rust".to_string(), 'x'), "rust");
+        assert_eq!(remove_char(RemoveLocationEnum::End, &"mars".to_string(), 'z'), "mars");
     }
 }

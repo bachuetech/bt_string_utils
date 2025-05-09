@@ -105,6 +105,12 @@ pub fn find_value_by_key(kv_pairs: &Vec<String>, key_to_find: &str) -> Option<St
     None
 }
 
+/// Remove Location for remove_char function
+pub enum RemoveLocationEnum {
+    Begin,
+    End,
+}
+
 /// Removes the first or last character of a string if it matches the given target character.
 ///
 /// # Arguments
@@ -120,23 +126,31 @@ pub fn find_value_by_key(kv_pairs: &Vec<String>, key_to_find: &str) -> Option<St
 /// # Examples
 ///
 /// ```
-/// use bt_string_utils::remove_char;
-/// let modified = remove_char(true, "hello".to_string(), 'h');
+/// use bt_string_utils::{remove_char, RemoveLocationEnum};
+/// let modified = remove_char(RemoveLocationEnum::Begin, &"hello".to_string(), 'h');
 /// assert_eq!(modified, "ello");
 ///
-/// let modified = remove_char(false, "world!".to_string(), '!');
+/// let modified = remove_char(RemoveLocationEnum::End, &"world!".to_string(), '!');
 /// assert_eq!(modified, "world");
 /// ```
 ///
 /// If the character doesn't match, the original string is returned:
 ///
 /// ```
-/// use bt_string_utils::remove_char;
-/// let modified = remove_char(true, "rust".to_string(), 'x');
+/// use bt_string_utils::{remove_char, RemoveLocationEnum};
+/// let modified = remove_char(RemoveLocationEnum::Begin, &"rust".to_string(), 'x');
 /// assert_eq!(modified, "rust");
 /// ```
-pub fn remove_char(begin: bool, input: String, target: char) -> String {
-    if begin {
+pub fn remove_char(remove_from: RemoveLocationEnum, input: &String, target: char) -> String {
+    match remove_from{
+        RemoveLocationEnum::Begin => if input.starts_with(target) {
+                                        return input.chars().skip(1).collect();
+                                     },
+        RemoveLocationEnum::End => if input.ends_with(target) {
+                                        return input.chars().take(input.len() - 1).collect();
+                                    },
+    }
+    /*if begin {
         if input.starts_with(target) {
             return input.chars().skip(1).collect();
         }
@@ -144,6 +158,6 @@ pub fn remove_char(begin: bool, input: String, target: char) -> String {
         if input.ends_with(target) {
             return input.chars().take(input.len() - 1).collect();
         }
-    }
-    input // Return unchanged if no removal occurs
+    }*/
+    input.to_string() // Return unchanged if no removal occurs
 }
