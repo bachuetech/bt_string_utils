@@ -20,6 +20,8 @@ let content = get_first_of_split("First:Second:Third",":");
     * Add remove_char function to remove a character from the begining or end of String
 * 0.2.2
     * Breaking change: Add Enum remove_location (Begin or End) for remove_char
+* 0.2.3
+    * Add Function to generate Random String of size n (generate_url_safe_string).
 
 ## License
 GPL-3.0-only

@@ -1,5 +1,7 @@
 //! Multiple String related functions
 
+use rand::{distr::Alphanumeric, Rng};
+
 /// Splits the given string at the first occurrence of the specified separator.
 ///
 /// # Arguments
@@ -161,3 +163,40 @@ pub fn remove_char(remove_from: RemoveLocationEnum, input: &String, target: char
     }*/
     input.to_string() // Return unchanged if no removal occurs
 }
+
+/// Generates a random URL-safe string of the specified length.
+///
+/// # Arguments
+///
+/// * `n` - The length of the generated string.
+///
+/// # Returns
+///
+/// A `String` containing `n` random alphanumeric characters (`A-Z`, `a-z`, `0-9`).
+///
+/// # Examples
+///
+/// ```
+/// use bt_string_utils::generate_url_safe_string;
+/// let random_string = generate_url_safe_string(16);
+/// println!("Generated string: {}", random_string);
+/// ```
+///
+/// # Notes
+///
+/// - Uses the `rand` crate to generate random alphanumeric characters.
+/// - Ensures the output contains only **URL-safe** characters.
+/// - May require the `rand` crate in your Cargo.toml:
+///
+/// ```toml
+/// [dependencies]
+/// rand = "0.8"
+/// ```
+pub fn generate_url_safe_string(n: usize) -> String {
+    rand::rng()
+        .sample_iter(&Alphanumeric)
+        .take(n)
+        .map(char::from)
+        .collect()
+}
+

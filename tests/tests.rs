@@ -73,3 +73,36 @@ mod removed_tests {
         assert_eq!(remove_char(RemoveLocationEnum::End, &"mars".to_string(), 'z'), "mars");
     }
 }
+
+#[cfg(test)]
+mod rand_string_tests {
+    use bt_string_utils::generate_url_safe_string;
+
+    #[test]
+    fn test_generate_string_length() {
+        let length = 16;
+        let result = generate_url_safe_string(length);
+        assert_eq!(result.len(), length, "Generated string should be {} characters long", length);
+    }
+
+    #[test]
+    fn test_generate_string_is_alphanumeric() {
+        let result = generate_url_safe_string(20);
+        assert!(result.chars().all(|c| c.is_ascii_alphanumeric()), "Generated string should contain only alphanumeric characters");
+        assert_eq!(result.len(),20);
+    }
+
+    #[test]
+    fn test_generate_string_with_zero_length() {
+        let result = generate_url_safe_string(0);
+        assert_eq!(result.len(), 0, "Generated string for length 0 should be an empty string");
+    }
+
+    #[test]
+    fn test_generate_string_uniqueness() {
+        let result1 = generate_url_safe_string(10);
+        let result2 = generate_url_safe_string(10);
+        assert_ne!(result1, result2, "Two generated strings should be different");
+    }
+
+}
