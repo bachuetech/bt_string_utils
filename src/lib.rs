@@ -1,6 +1,7 @@
 //! Multiple String related functions
 
 use rand::{distr::Alphanumeric, Rng};
+use regex::Regex;
 
 /// Splits the given string at the first occurrence of the specified separator.
 ///
@@ -200,3 +201,37 @@ pub fn generate_url_safe_string(n: usize) -> String {
         .collect()
 }
 
+/// Checks whether a given `haystack` string contains the specified `word`
+/// as a whole word, using word boundaries.
+///
+/// A whole word match means the `word` must be surrounded by non-word characters
+/// (e.g., spaces, punctuation) or string boundaries. Substrings within longer words
+/// will not match.
+///
+/// # Arguments
+///
+/// * `text` - The string to search within.
+/// * `word` - The target word to search for.
+///
+/// # Returns
+///
+/// * `true` if `word` appears as a whole word in `haystack`.
+/// * `false` otherwise.
+///
+/// # Examples
+///
+/// ```
+/// use bt_string_utils::contains_whole_word;
+/// assert_eq!(contains_whole_word("this is a target match", "target"), true);
+/// assert_eq!(contains_whole_word("this is a targeted match", "target"), false);
+/// assert_eq!(contains_whole_word("no-target", "target"), false);
+/// ```
+pub fn contains_whole_word(text: &str, word: &str) -> bool {
+    //let pattern = format!(r"\b{}\b", regex::escape(word));
+    //let pattern = format!(r"(?i)(?<!\w){}(?!\w)", regex::escape(word));
+    //let pattern =  format!(r"(?<![A-Za-z0-9-]){}(?![A-Za-z0-9-])",regex::escape(word) );
+    let pattern = format!(r"(?:^|[^A-Za-z0-9-]){}(?:[^A-Za-z0-9-]|$)", regex::escape(word));    
+
+    let re = Regex::new(&pattern).unwrap();
+    re.is_match(text)
+}

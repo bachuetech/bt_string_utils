@@ -106,3 +106,62 @@ mod rand_string_tests {
     }
 
 }
+
+#[cfg(test)]
+mod string_match_tests {
+    use bt_string_utils::contains_whole_word;
+
+    #[test]
+    fn test_exact_match() {
+        let text = "this is a target match";
+        assert!(contains_whole_word(text, "target"));
+    }
+
+    #[test]
+    fn test_substring_match_should_false() {
+        let text = "this is a targeted match";
+        assert!(!contains_whole_word(text, "target"));
+    }
+
+    #[test]
+    fn test_hyphenated_word_should_false() {
+        let text = "no-target";
+        assert!(!contains_whole_word(text, "target"));
+    }
+
+    #[test]
+    fn test_word_at_start() {
+        let text = "target is the goal";
+        assert!(contains_whole_word(text, "target"));
+    }
+
+    #[test]
+    fn test_word_at_end() {
+        let text = "the goal is target";
+        assert!(contains_whole_word(text, "target"));
+    }
+
+    #[test]
+    fn test_multiple_occurrences() {
+        let text = "target target target";
+        assert!(contains_whole_word(text, "target"));
+    }
+
+    #[test]
+    fn test_case_sensitive() {
+        let text = "Target is here";
+        assert!(!contains_whole_word(text, "target")); // case-sensitive by default
+    }
+
+    #[test]
+    fn test_empty_haystack() {
+        let text = "";
+        assert!(!contains_whole_word(text, "target"));
+    }
+
+    #[test]
+    fn test_empty_word() {
+        let text = "some text here";
+        assert!(!contains_whole_word(text, ""));
+    }
+}
