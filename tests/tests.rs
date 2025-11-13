@@ -130,6 +130,12 @@ mod string_match_tests {
     }
 
     #[test]
+    fn test_hyphenated_word_should_vs_hyphened_true() {
+        let text = "This no-target is match";
+        assert!(contains_whole_word(text, "no-target"));
+    }
+
+    #[test]
     fn test_word_at_start() {
         let text = "target is the goal";
         assert!(contains_whole_word(text, "target"));

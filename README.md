@@ -22,6 +22,10 @@ let content = get_first_of_split("First:Second:Third",":");
     * Breaking change: Add Enum remove_location (Begin or End) for remove_char
 * 0.2.3
     * Add Function to generate Random String of size n (generate_url_safe_string).
+* 0.2.4 
+    * Update dependencies. Add function to find whole word matches
+* 0.2.5
+    * Update dependencies.
 
 ## License
 GPL-3.0-only

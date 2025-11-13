@@ -227,9 +227,6 @@ pub fn generate_url_safe_string(n: usize) -> String {
 /// assert_eq!(contains_whole_word("no-target", "target"), false);
 /// ```
 pub fn contains_whole_word(text: &str, word: &str) -> bool {
-    //let pattern = format!(r"\b{}\b", regex::escape(word));
-    //let pattern = format!(r"(?i)(?<!\w){}(?!\w)", regex::escape(word));
-    //let pattern =  format!(r"(?<![A-Za-z0-9-]){}(?![A-Za-z0-9-])",regex::escape(word) );
     let pattern = format!(r"(?:^|[^A-Za-z0-9-]){}(?:[^A-Za-z0-9-]|$)", regex::escape(word));    
 
     let re = Regex::new(&pattern).unwrap();
