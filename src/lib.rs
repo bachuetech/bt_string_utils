@@ -232,3 +232,42 @@ pub fn contains_whole_word(text: &str, word: &str) -> bool {
     let re = Regex::new(&pattern).unwrap();
     re.is_match(text)
 }
+
+/// The remove_first_n function removes the first n characters from a string slice, 
+/// returning a new string slice that starts from the character after the nth character. 
+/// This function properly handles Unicode characters by working with character indices rather than byte indices, 
+/// ensuring that multi-byte UTF-8 characters are correctly handled.
+/// 
+/// # Parameters
+///    s: &str - A string slice from which characters will be removed
+///    n: usize - The number of characters to remove from the beginning of the string
+/// 
+/// # Returns
+///    &str - A string slice containing the original string with the first n characters removed
+/// 
+/// # Examples
+/// ```
+/// use bt_string_utils::remove_first_n_characters;
+/// ```
+/// Remove first 3 characters
+/// ```
+/// use bt_string_utils::remove_first_n_characters;
+/// let result = remove_first_n_characters("Hello, World!", 3);
+/// assert_eq!(result, "lo, World!");  // 'Hel' removed
+/// ```
+/// Remove more characters than exist
+/// ```
+/// use bt_string_utils::remove_first_n_characters;
+/// let result = remove_first_n_characters("Hi", 5);
+/// assert_eq!(result, "");  // Empty string returned
+/// ```
+/// Handle Unicode characters
+/// ```
+/// use bt_string_utils::remove_first_n_characters;
+/// let result = remove_first_n_characters("🌟Hello", 1);
+/// assert_eq!(result, "Hello");  // The emoji (2 bytes) is properly skipped
+/// ```
+pub fn remove_first_n_characters(s: &str, n: usize) -> &str {
+    let byte_index = s.char_indices().nth(n).map(|(i, _)| i).unwrap_or(s.len());
+    &s[byte_index..]
+}

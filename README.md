@@ -26,6 +26,8 @@ let content = get_first_of_split("First:Second:Third",":");
     * Update dependencies. Add function to find whole word matches
 * 0.2.5
     * Update dependencies.
+* 0.2.5
+    * Add function remove first n characters from a &str
 
 ## License
 GPL-3.0-only
