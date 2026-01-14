@@ -171,3 +171,57 @@ mod string_match_tests {
         assert!(!contains_whole_word(text, ""));
     }
 }
+
+#[cfg(test)]
+mod string_break_tests {
+    use bt_string_utils::split_upto_n_by_word;
+
+    #[test]
+    fn splits_simple_ascii() {
+        let s = "one two three four";
+        let parts = split_upto_n_by_word(s, 2);
+        assert_eq!(parts, vec!["one two ", "three four"]);
+    }
+
+    #[test]
+    fn splits_unicode_words() {
+        let s = "Hello 🙂 World from Rust";
+        let parts = split_upto_n_by_word(s, 3);
+        assert_eq!(parts, vec!["Hello ", "🙂 World ", "from Rust"]);
+    }
+
+    #[test]
+    fn does_not_split_inside_emoji() {
+        let s = "🙂🙂 🙂🙂 🙂🙂";
+        let parts = split_upto_n_by_word(s, 3);
+        assert_eq!(parts, vec!["🙂🙂 ", "🙂🙂 ", "🙂🙂"]);
+    }
+
+    #[test]
+    fn n_larger_than_word_count_preserves_spaces() {
+        let s = "Hello 🙂 World.";
+        let parts = split_upto_n_by_word(s, 10);
+        assert_eq!(parts, vec!["Hello ", "🙂 ", "World."]);
+    }
+
+    #[test]
+    fn n_equals_one_preserves_all() {
+        let s = "  Hello   🙂   World  ";
+        let parts = split_upto_n_by_word(s, 1);
+        assert_eq!(parts, vec![s.trim_start_matches('\0')]); // or just vec![s]
+    }
+
+    #[test]
+    fn empty_string_returns_empty_vec() {
+        let s = "";
+        let parts = split_upto_n_by_word(s, 5);
+        assert!(parts.is_empty());
+    }
+
+    #[test]
+    fn multiple_spaces_are_preserved() {
+        let s = "Hello   world   from   Rust";
+        let parts = split_upto_n_by_word(s, 2);
+        assert_eq!(parts, vec!["Hello   world   ", "from   Rust"]);
+    }
+}

@@ -271,3 +271,112 @@ pub fn remove_first_n_characters(s: &str, n: usize) -> &str {
     let byte_index = s.char_indices().nth(n).map(|(i, _)| i).unwrap_or(s.len());
     &s[byte_index..]
 }
+
+
+/// Splits a string into at most `n` substrings, grouped by whole words.
+///
+/// This function performs **word‑based splitting**, never character‑based.
+/// It guarantees:
+///
+/// - Words are never broken apart.
+/// - The number of returned substrings is **min(n, word_count)**.
+/// - Unicode and emoji are handled safely (because splitting happens on
+///   whitespace boundaries, which are always valid UTF‑8 boundaries).
+/// - The original string is never copied; all substrings are `&str` slices.
+///
+///
+/// # Arguments
+/// * `s` — The input string to split.
+/// * `n` — The desired number of substrings. The function will never return
+///         more substrings than the number of words in `s`.
+///
+/// # Returns
+/// A `Vec<&str>` containing up to `n` substrings, each containing one or more
+/// whole words from the original string.
+///
+/// # Examples
+/// Splitting into fewer groups than words:
+/// ```
+/// use bt_string_utils::split_upto_n_by_word;
+/// let s = "Hello 🙂 World from Rust";
+/// let parts = split_upto_n_by_word(s, 3);
+/// assert_eq!(parts, vec!["Hello ", "🙂 World ", "from Rust"]);
+/// ```
+///
+/// Requesting more groups than words:
+///
+/// ```
+/// use bt_string_utils::split_upto_n_by_word;
+/// let s = "Hello 🙂 World";
+/// let parts = split_upto_n_by_word(s, 10);
+/// assert_eq!(parts, vec!["Hello ", "🙂 ", "World"]);
+/// ```
+///
+/// Single group:
+///
+/// ```
+/// use bt_string_utils::split_upto_n_by_word;
+/// let s = "Hello world";
+/// let parts = split_upto_n_by_word(s, 1);
+/// assert_eq!(parts, vec!["Hello world"]);
+/// ```
+///
+/// Empty input:
+///
+/// ```
+/// use bt_string_utils::split_upto_n_by_word;
+/// let parts = split_upto_n_by_word("", 5);
+/// assert!(parts.is_empty());
+/// ```
+pub fn split_upto_n_by_word(s: &str, n: usize) -> Vec<&str> {
+    // Find word ranges as byte indices: [start, end)
+    let mut ranges = Vec::new();
+    let mut in_word = false;
+    let mut word_start = 0;
+
+    for (i, ch) in s.char_indices() {
+        if ch.is_whitespace() {
+            if in_word {
+                ranges.push((word_start, i));
+                in_word = false;
+            }
+        } else if !in_word {
+            in_word = true;
+            word_start = i;
+        }
+    }
+    if in_word {
+        ranges.push((word_start, s.len()));
+    }
+
+    let total = ranges.len();
+    if total == 0 {
+        return Vec::new();
+    }
+
+    let parts = n.min(total);
+    let mut out = Vec::with_capacity(parts);
+
+    for i in 0..parts {
+        let start_word = i * total / parts;
+        let end_word = (i + 1) * total / parts - 1;
+
+        // For the first chunk, start at 0 to keep leading spaces.
+        let start = if i == 0 {
+            0
+        } else {
+            ranges[start_word].0
+        };
+
+        // End at the start of the next word, or end of string for the last chunk.
+        let end = if end_word + 1 < total {
+            ranges[end_word + 1].0
+        } else {
+            s.len()
+        };
+
+        out.push(&s[start..end]);
+    }
+
+    out
+}
