@@ -14,22 +14,24 @@ let content = get_first_of_split("First:Second:Third",":");
 * 0.1.0
     * Initial Release
 * 0.2.0
-    * Add function to find the value of a given key in a Vector of Strings with the form "key=value"
-    * Breaking change: Change Name of function due to typo. get_first_occurrance
+    * Add a function to find the value of a given key in a Vector of Strings with the form "key=value"
+    * Breaking change: Change the name of the function due to a typo. get_first_occurrance
 * 0.2.1
-    * Add remove_char function to remove a character from the begining or end of String
+    * Add remove_char function to remove a character from the beginning or end of the string
 * 0.2.2
     * Breaking change: Add Enum remove_location (Begin or End) for remove_char
 * 0.2.3
-    * Add Function to generate Random String of size n (generate_url_safe_string).
+    * Add a function to generate a random string of size n (generate_url_safe_string).
 * 0.2.4 
-    * Update dependencies. Add function to find whole word matches
+    * Update dependencies. Add a function to find whole-word matches
 * 0.2.5
     * Update dependencies.
 * 0.2.6
     * Add function remove first n characters from a &str
 * 0.2.7
-    * Add function split_upto_n_by_word to evenly split a string in n groups by words    
+    * Add function split_upto_n_by_word to evenly split a string into n groups by words
+* 0.2.8
+    * Function split_upto_n_by_word split now using also punctuation marks and whitespace that separate words are at the beginning of a group       
 
 ## License
 GPL-3.0-only

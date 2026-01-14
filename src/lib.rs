@@ -2,6 +2,7 @@
 
 use rand::{distr::Alphanumeric, Rng};
 use regex::Regex;
+use unicode_segmentation::UnicodeSegmentation;
 
 /// Splits the given string at the first occurrence of the specified separator.
 ///
@@ -329,15 +330,15 @@ pub fn remove_first_n_characters(s: &str, n: usize) -> &str {
 /// assert!(parts.is_empty());
 /// ```
 pub fn split_upto_n_by_word(s: &str, n: usize) -> Vec<&str> {
-    // Find word ranges as byte indices: [start, end)
-    let mut ranges = Vec::new();
+    // Detect word ranges: [start, end)
+/*    let mut words = Vec::new();
     let mut in_word = false;
     let mut word_start = 0;
 
     for (i, ch) in s.char_indices() {
         if ch.is_whitespace() {
             if in_word {
-                ranges.push((word_start, i));
+                words.push((word_start, i));
                 in_word = false;
             }
         } else if !in_word {
@@ -346,10 +347,10 @@ pub fn split_upto_n_by_word(s: &str, n: usize) -> Vec<&str> {
         }
     }
     if in_word {
-        ranges.push((word_start, s.len()));
+        words.push((word_start, s.len()));
     }
 
-    let total = ranges.len();
+    let total = words.len();
     if total == 0 {
         return Vec::new();
     }
@@ -361,16 +362,17 @@ pub fn split_upto_n_by_word(s: &str, n: usize) -> Vec<&str> {
         let start_word = i * total / parts;
         let end_word = (i + 1) * total / parts - 1;
 
-        // For the first chunk, start at 0 to keep leading spaces.
-        let start = if i == 0 {
-            0
-        } else {
-            ranges[start_word].0
-        };
+        // Start at the beginning of the first word in this group,
+        // but include any whitespace *before* that word.
+        let mut start = words[start_word].0;
+        while start > 0 && s.as_bytes()[start - 1].is_ascii_whitespace() {
+            start -= 1;
+        }
 
-        // End at the start of the next word, or end of string for the last chunk.
+        // End at the beginning of the next group's first word,
+        // or at the end of the string for the last group.
         let end = if end_word + 1 < total {
-            ranges[end_word + 1].0
+            words[end_word + 1].0
         } else {
             s.len()
         };
@@ -378,5 +380,64 @@ pub fn split_upto_n_by_word(s: &str, n: usize) -> Vec<&str> {
         out.push(&s[start..end]);
     }
 
+    out*/
+    // 1. Identify words including trailing punctuation
+    let mut words = Vec::new();
+    let mut in_word = false;
+    let mut start = 0;
+
+    for (i, ch) in s.char_indices() {
+        if ch.is_whitespace() {
+            if in_word {
+                words.push((start, i));
+                in_word = false;
+            }
+        } else {
+            if !in_word {
+                in_word = true;
+                start = i;
+            }
+        }
+    }
+    if in_word {
+        words.push((start, s.len()));
+    }
+
+    let total = words.len();
+    if total == 0 {
+        return Vec::new();
+    }
+
+    let parts = n.min(total);
+    let mut out = Vec::with_capacity(parts);
+
+    // 2. Precompute whitespace map
+    let mut is_space = vec![false; s.len()];
+    for (i, ch) in s.char_indices() {
+        if ch.is_whitespace() {
+            is_space[i] = true;
+        }
+    }
+
+    // 3. Build groups
+    for i in 0..parts {
+        let start_word = i * total / parts;
+        let end_word = (i + 1) * total / parts - 1;
+
+        // Start at the beginning of the first word in this group,
+        // but include ALL whitespace before it.
+        let mut start_idx = words[start_word].0;
+        while start_idx > 0 && is_space[start_idx - 1] {
+            start_idx -= 1;
+        }
+
+        // End at the end of the last word in this group.
+        let end_idx = words[end_word].1;
+
+        out.push(&s[start_idx..end_idx]);
+    }
+
     out
+
+
 }
