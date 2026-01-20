@@ -258,6 +258,84 @@ mod string_break_tests {
             "   world",
         ]);
     }
-
-
 }
+
+#[cfg(test)]
+mod remove_tags_tests {
+    use bt_string_utils::remove_tags;
+
+    
+
+    #[test]
+    fn empty_string() {
+        let s = String::new();
+        let r = remove_tags(&s, "<custom>","</custom>");
+        assert_eq!(r, "");
+    }
+
+    #[test]
+    fn whitespace_only() {
+        let s = "     ".to_string();
+        let r = remove_tags(&s, "<custom>","</custom>");
+        assert_eq!(r, "     ");
+    }
+
+    #[test]
+    fn no_tags() {
+        let s = "hello world".to_string();
+        let r = remove_tags(&s, "<custom>","</custom>");
+        assert_eq!(r, "hello world");
+    }
+
+    #[test]
+    fn single_tag() {
+        let s = "a <custom>xxx</custom> b".to_string();
+        let r = remove_tags(&s, "<custom>","</custom>");
+        assert_eq!(r, "a  b");
+    }
+
+    #[test]
+    fn multiple_tags() {
+        let s = "1 <custom>a</custom> 2 <custom>b</custom> 3".to_string();
+        let r = remove_tags(&s, "<custom>","</custom>");
+        assert_eq!(r, "1  2  3");
+    }
+
+    #[test]
+    fn nested_tags() {
+        // Your function removes from first <custom> to first </custom>
+        let s = "<custom>a <custom>b</custom> c</custom> END".to_string();
+        let r = remove_tags(&s, "<custom>","</custom>");
+        assert_eq!(r, " END");
+    }
+
+    #[test]
+    fn missing_closing_tag() {
+        let s = "before <custom>no end".to_string();
+        let r = remove_tags(&s, "<custom>","</custom>");
+        // Everything after <custom> is dropped
+        assert_eq!(r, "before ");
+    }
+
+    #[test]
+    fn utf8_characters() {
+        let s = "héllo <custom>remove</custom> wørld 🌍".to_string();
+        let r = remove_tags(&s, "<custom>","</custom>");
+        assert_eq!(r, "héllo  wørld 🌍");
+    }
+
+    #[test]
+    fn tag_at_start() {
+        let s = "<custom>abc</custom>xyz".to_string();
+        let r = remove_tags(&s, "<custom>","</custom>");
+        assert_eq!(r, "xyz");
+    }
+
+    #[test]
+    fn tag_at_end() {
+        let s = "xyz<custom>abc</custom>".to_string();
+        let r = remove_tags(&s, "<custom>","</custom>");
+        assert_eq!(r, "xyz");
+    }
+}
+

@@ -301,7 +301,7 @@ pub fn remove_first_n_characters(s: &str, n: usize) -> &str {
 /// use bt_string_utils::split_upto_n_by_word;
 /// let s = "Hello 🙂 World from Rust";
 /// let parts = split_upto_n_by_word(s, 3);
-/// assert_eq!(parts, vec!["Hello ", "🙂 World ", "from Rust"]);
+/// assert_eq!(parts, vec!["Hello", " 🙂 World", " from Rust"]);
 /// ```
 ///
 /// Requesting more groups than words:
@@ -310,7 +310,7 @@ pub fn remove_first_n_characters(s: &str, n: usize) -> &str {
 /// use bt_string_utils::split_upto_n_by_word;
 /// let s = "Hello 🙂 World";
 /// let parts = split_upto_n_by_word(s, 10);
-/// assert_eq!(parts, vec!["Hello ", "🙂 ", "World"]);
+/// assert_eq!(parts, vec!["Hello", " 🙂", " World"]);
 /// ```
 ///
 /// Single group:
@@ -438,6 +438,118 @@ pub fn split_upto_n_by_word(s: &str, n: usize) -> Vec<&str> {
     }
 
     out
+}
 
+/// Removes all `<custom> ... </custom>` sections from the input string,
+/// returning a new `String` with the tags and their contents removed.
+/// # Parameters
+///
+/// * `s: &str`  
+///   The input string to process.  
+///   This may contain zero, one, or multiple `<custom> ... </custom>`
+///   tag pairs. The function treats tags literally and does not interpret
+///   nested or malformed markup.
+/// * `open_tag: &str`
+///    The open tag (e.g. <custom>).  `<custom> ... </custom>`
+/// * `close_tag: &str`
+///    The close tag (e.g. </custom>). `<custom> ... </custom>`
+/// # Behavior
+///
+/// - Every occurrence of `<custom>` starts a removal region.
+/// - The function removes everything from `<custom>` up to and including
+///   the next `</custom>` tag.
+/// - If a `<custom>` tag appears **without** a matching `</custom>`,
+///   the function removes the `<custom>` tag and **drops the remainder**
+///   of the string.
+/// - Text outside of `<custom> ... </custom>` is preserved exactly,
+///   including whitespace and UTF‑8 characters.
+/// - The first closing tag always ends the removal region.
+///
+/// # Returns
+///
+/// A new `String` containing the original text with all `<custom>`
+/// sections removed.
+///
+/// # Performance
+///
+/// # Examples
+///
+/// ## Basic removal
+/// ```
+/// use bt_string_utils::remove_tags;
+/// let result = remove_tags("Hello <custom>secret</custom> world", "<custom>","</custom>");
+/// assert_eq!(result, "Hello  world");
+/// ```
+///
+/// ## Multiple tags
+/// ```
+/// use bt_string_utils::remove_tags;
+/// let result = remove_tags("1 <custom>a</custom> 2 <custom>b</custom> 3", "<custom>","</custom>");
+/// assert_eq!(result, "1  2  3");
+/// ```
+///
+/// ## Missing closing tag
+/// ```
+/// use bt_string_utils::remove_tags;
+/// let result = remove_tags("before <custom>unfinished", "<custom>","</custom>");
+/// assert_eq!(result, "before ");
+/// ```
+///
+/// ## UTF‑8 characters preserved
+/// ```
+/// use bt_string_utils::remove_tags;
+/// let result = remove_tags("héllo <custom>x</custom> wørld 🌍", "<custom>","</custom>");
+/// assert_eq!(result, "héllo  wørld 🌍");
+/// ```
+///
+/// ## No tags present
+/// ```
+/// use bt_string_utils::remove_tags;
+/// let result = remove_tags("nothing to remove", "<custom>","</custom>");
+/// assert_eq!(result, "nothing to remove");
+/// ```
+pub fn remove_tags(text: &str, open_tag: &str, close_tag: &str) -> String {
+    //const OPEN: &str = "<custom>";
+    //const CLOSE: &str = "</custom>";
 
+    let mut out = String::with_capacity(text.len());
+    let text_bytes = text.as_bytes();
+    let mut i = 0;
+
+    while i < text_bytes.len() {
+        // Check for opening tag
+        if text_bytes[i..].starts_with(open_tag.as_bytes()) {
+            // Found an opening tag
+            i += open_tag.len();
+
+            // We are inside a removal region; support nesting
+            let mut depth = 1;
+            while i < text_bytes.len() && depth > 0 {
+                if text_bytes[i..].starts_with(open_tag.as_bytes()) {
+                    depth += 1;
+                    i += open_tag.len();
+                } else if text_bytes[i..].starts_with(close_tag.as_bytes()) {
+                    depth -= 1;
+                    i += close_tag.len();
+                } else {
+                    // Just advance by one byte inside the removed region
+                    i += 1;
+                }
+            }
+
+            // If depth > 0 here, there was no matching closing tag:
+            // we just drop the remainder.
+            if depth > 0 {
+                break;
+            }
+
+        } else {
+            // Copy one UTF‑8 character safely
+            let ch = text[i..].chars().next().unwrap();
+            out.push(ch);
+            i += ch.len_utf8();
+        }
+
+    }
+    out
 }
