@@ -33,7 +33,9 @@ let content = get_first_of_split("First:Second:Third",":");
 * 0.2.8
     * Function split_upto_n_by_word split now using also punctuation marks and whitespace that separate words are at the beginning of a group
 * 0.2.9
-    * Add function to remove Tags and the content between tags       
+    * Add function to remove Tags and the content between tags   
+* 0.2.10
+    * Add functions to count words and paragraphs.       
 
 ## License
 GPL-3.0-only

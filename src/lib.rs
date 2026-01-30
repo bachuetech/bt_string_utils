@@ -1,8 +1,9 @@
 //! Multiple String related functions
+pub mod lib2;
 
 use rand::{distr::Alphanumeric, Rng};
 use regex::Regex;
-use unicode_segmentation::UnicodeSegmentation;
+
 
 /// Splits the given string at the first occurrence of the specified separator.
 ///
@@ -330,57 +331,6 @@ pub fn remove_first_n_characters(s: &str, n: usize) -> &str {
 /// assert!(parts.is_empty());
 /// ```
 pub fn split_upto_n_by_word(s: &str, n: usize) -> Vec<&str> {
-    // Detect word ranges: [start, end)
-/*    let mut words = Vec::new();
-    let mut in_word = false;
-    let mut word_start = 0;
-
-    for (i, ch) in s.char_indices() {
-        if ch.is_whitespace() {
-            if in_word {
-                words.push((word_start, i));
-                in_word = false;
-            }
-        } else if !in_word {
-            in_word = true;
-            word_start = i;
-        }
-    }
-    if in_word {
-        words.push((word_start, s.len()));
-    }
-
-    let total = words.len();
-    if total == 0 {
-        return Vec::new();
-    }
-
-    let parts = n.min(total);
-    let mut out = Vec::with_capacity(parts);
-
-    for i in 0..parts {
-        let start_word = i * total / parts;
-        let end_word = (i + 1) * total / parts - 1;
-
-        // Start at the beginning of the first word in this group,
-        // but include any whitespace *before* that word.
-        let mut start = words[start_word].0;
-        while start > 0 && s.as_bytes()[start - 1].is_ascii_whitespace() {
-            start -= 1;
-        }
-
-        // End at the beginning of the next group's first word,
-        // or at the end of the string for the last group.
-        let end = if end_word + 1 < total {
-            words[end_word + 1].0
-        } else {
-            s.len()
-        };
-
-        out.push(&s[start..end]);
-    }
-
-    out*/
     // 1. Identify words including trailing punctuation
     let mut words = Vec::new();
     let mut in_word = false;
