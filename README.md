@@ -35,7 +35,9 @@ let content = get_first_of_split("First:Second:Third",":");
 * 0.2.9
     * Add function to remove Tags and the content between tags   
 * 0.2.10
-    * Add functions to count words and paragraphs.       
+    * Add functions to count words and paragraphs.  
+* 0.2.11
+    * Add functions that splits a given string into multiple chunks of n bytes
 
 ## License
 GPL-3.0-only
