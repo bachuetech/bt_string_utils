@@ -1,7 +1,10 @@
 //! Multiple String related functions
 pub mod lib2;
 
-use rand::{distr::Alphanumeric, Rng};
+use std::collections::HashMap;
+
+use rand::distr::SampleString;
+use rand::distr::Alphanumeric;
 use regex::Regex;
 
 
@@ -193,14 +196,15 @@ pub fn remove_char(remove_from: RemoveLocationEnum, input: &String, target: char
 ///
 /// ```toml
 /// [dependencies]
-/// rand = "0.8"
+/// rand = "0.10"
 /// ```
 pub fn generate_url_safe_string(n: usize) -> String {
-    rand::rng()
+    /*rand::rng()
         .sample_iter(&Alphanumeric)
         .take(n)
         .map(char::from)
-        .collect()
+        .collect()*/
+    Alphanumeric.sample_string(&mut rand::rng(), n)       
 }
 
 /// Checks whether a given `haystack` string contains the specified `word`
@@ -502,4 +506,77 @@ pub fn remove_tags(text: &str, open_tag: &str, close_tag: &str) -> String {
 
     }
     out
+}
+
+/// Replaces all Unicode whitespace characters in the given string slice
+/// with the specified replacement character.
+///
+/// This function treats any character for which `char::is_whitespace()`
+/// returns `true` as whitespace. That includes spaces, tabs, newlines,
+/// and a variety of Unicode whitespace characters.
+///
+/// # Arguments
+///
+/// * `input` - The string slice to process.
+/// * `replacement` - The character that will replace each whitespace character.
+///
+/// # Returns
+///
+/// A new `String` where every whitespace character has been replaced
+/// by the provided `replacement` character.
+///
+/// # Examples
+///
+/// ```
+/// use bt_string_utils::replace_whitespace;
+/// let result = replace_whitespace("Hello   world\nRust!", '_');
+/// assert_eq!(result, "Hello___world_Rust!");
+/// ```
+pub fn replace_whitespace(input: &str, replacement: char) -> String {
+    input
+        .chars()
+        .map(|c| if c.is_whitespace() { replacement } else { c })
+        .collect()
+}
+
+pub fn remove_whitespace(input: &str) -> String {
+    let mut out = String::with_capacity(input.len());
+    out.extend(input.chars().filter(|c| { 
+        if c.is_whitespace() || c.is_control() {return false}
+
+        let u = *c as u32;
+        // Remove zero-width characters
+        if matches!(u,
+            0x200B | // zero-width space
+            0x200C | // zero-width non-joiner
+            0x200D | // zero-width joiner
+            0xFEFF   // zero-width no-break space (BOM)
+        ) { return false }
+
+        // Remove soft hyphen
+        if u == 0x00AD { return false;  }
+
+        // Remove Private Use Area characters
+        if (0xE000..=0xF8FF).contains(&u)
+            || (0xF0000..=0xFFFFD).contains(&u)
+            || (0x100000..=0x10FFFD).contains(&u)
+        { return false;  }
+
+        true
+    })); 
+    out
+}
+
+pub fn word_diff_count(a: Vec<&str>, b: Vec<&str>) -> usize {
+    let mut count = HashMap::<&str, isize>::new();
+
+    for w in a {
+        *count.entry(w).or_insert(0) += 1;
+    }
+
+    for w in b {
+        *count.entry(w).or_insert(0) -= 1;
+    }
+
+    count.values().map(|v| v.abs() as usize).sum()
 }

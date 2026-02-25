@@ -154,8 +154,9 @@ pub fn count_paragraphs(text: &str) -> usize {
 /// # Example
 /// 
 /// ```rust
+/// use bt_string_utils::lib2::split_into_chunks;
 /// let document: &str = "Your 70k+ character document..."; // some long document content
-/// let chunks = split_into_chunks(document);
+/// let chunks = split_into_chunks(document,5);
 /// for chunk in chunks {
 ///     println!("{}", chunk);
 /// }
