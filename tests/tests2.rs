@@ -59,8 +59,6 @@ mod word_count_tests {
 mod count_paragraphs_tests {
     use bt_string_utils::lib2::count_paragraphs;
 
-    use super::*;
-
     #[test]
     fn single_paragraph_no_newline() {
         assert_eq!(count_paragraphs("Hello world"), 1);

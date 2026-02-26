@@ -580,3 +580,36 @@ pub fn word_diff_count(a: Vec<&str>, b: Vec<&str>) -> usize {
 
     count.values().map(|v| v.abs() as usize).sum()
 }
+
+/// Extracts the first letter of every word in a string and returns
+/// the collected initials in uppercase.
+///
+/// Words are defined as sequences of non‑whitespace characters.
+/// Leading, trailing, and repeated whitespace are ignored.
+///
+/// # Examples
+///
+/// ```
+/// use bt_string_utils::initials_uppercase;
+/// let result = initials_uppercase("Rust language is fast");
+/// assert_eq!(result, "RLIF");
+/// ```
+///
+/// ```
+/// use bt_string_utils::initials_uppercase;
+/// let result = initials_uppercase("  multiple   spaces   here ");
+/// assert_eq!(result, "MSH");
+/// ```
+///
+/// ```
+/// use bt_string_utils::initials_uppercase;
+/// let result = initials_uppercase("");
+/// assert_eq!(result, "");
+/// ```
+pub fn initials_uppercase(input: &str) -> String {
+    input
+        .split_whitespace()
+        .filter_map(|word| word.chars().next())
+        .collect::<String>()
+        .to_uppercase()
+}

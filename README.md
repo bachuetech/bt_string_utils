@@ -40,6 +40,8 @@ let content = get_first_of_split("First:Second:Third",":");
     * Add functions that splits a given string into multiple chunks of n bytes
 * 0.2.12
     * Update dependencies. New functions word_diff_count, remove_whitespace and replace_whitespace
+* 0.2.13
+    * New functions initials_uppercase to extract initials from a String
 
 ## License
 GPL-3.0-only

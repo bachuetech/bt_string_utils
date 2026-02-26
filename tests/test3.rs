@@ -93,3 +93,49 @@ mod replace_whitespaces_tests {
     }
 }
 
+#[cfg(test)]
+mod initials_tests {
+    use bt_string_utils::initials_uppercase;
+
+    #[test]
+    fn basic_sentence() {
+        let s = "Rust language is fast";
+        assert_eq!(initials_uppercase(s), "RLIF");
+    }
+
+    #[test]
+    fn handles_multiple_spaces() {
+        let s = "  multiple   spaces   here ";
+        assert_eq!(initials_uppercase(s), "MSH");
+    }
+
+    #[test]
+    fn empty_string_returns_empty() {
+        let s = "";
+        assert_eq!(initials_uppercase(s), "");
+    }
+
+    #[test]
+    fn single_word() {
+        let s = "Hello";
+        assert_eq!(initials_uppercase(s), "H");
+    }
+
+    #[test]
+    fn unicode_words() {
+        let s = "árbol niño corazón";
+        assert_eq!(initials_uppercase(s), "ÁNC");
+    }
+
+    #[test]
+    fn unicode_mixed_scripts() {
+        let s = "東京 Rust язык";
+        assert_eq!(initials_uppercase(s), "東RЯ");
+    }
+
+    #[test]
+    fn punctuation_attached_to_words() {
+        let s = "Hello, world!";
+        assert_eq!(initials_uppercase(s), "HW");
+    }
+}
