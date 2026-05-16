@@ -3,7 +3,7 @@
 /**************** */
 #[cfg(test)]
 mod remove_whitespace_tests {
-    use bt_string_utils::remove_whitespace;
+    use bt_string_utils::cleanser::remove_whitespace;
 
 
     #[test]
@@ -40,7 +40,7 @@ mod remove_whitespace_tests {
 
 #[cfg(test)]
 mod replace_whitespaces_tests {
-    use bt_string_utils::replace_whitespace;
+    use bt_string_utils::cleanser::replace_whitespace;
 
 
     #[test]
@@ -95,7 +95,8 @@ mod replace_whitespaces_tests {
 
 #[cfg(test)]
 mod initials_tests {
-    use bt_string_utils::initials_uppercase;
+    use bt_string_utils::finder::initials_uppercase;
+
 
     #[test]
     fn basic_sentence() {

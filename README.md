@@ -42,6 +42,8 @@ let content = get_first_of_split("First:Second:Third",":");
     * Update dependencies. New functions word_diff_count, remove_whitespace and replace_whitespace
 * 0.2.13
     * New functions initials_uppercase to extract initials from a String
+* 0.3.0
+    * Breaking changes due to refactoring (finder, cleanser, splitter, analyzer). Update dependencies. Add function to get the first n chars.
 
 ## License
 GPL-3.0-only

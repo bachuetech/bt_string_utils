@@ -1,6 +1,8 @@
 #[cfg(test)]
 mod sub_strings_test{
-    use bt_string_utils::{get_first_occurrance, get_first_of_split};
+    use bt_string_utils::finder::get_first_occurrance;
+use bt_string_utils::splitter::get_first_of_split;
+
 
     #[test]
     fn test_first_occurance(){
@@ -36,7 +38,8 @@ mod sub_strings_test{
 //*************/
 #[cfg(test)]
 mod strings_test{
-    use bt_string_utils::find_value_by_key;
+    use bt_string_utils::splitter::find_value_by_key;
+
 
     #[test]
     fn find_value_by_key_exist_test(){
@@ -53,7 +56,8 @@ mod strings_test{
 
 #[cfg(test)]
 mod removed_tests {
-    use bt_string_utils::{remove_char, RemoveLocationEnum};
+    use bt_string_utils::cleanser::{RemoveLocationEnum, remove_char};
+
 
     #[test]
     fn test_remove_first_char() {
@@ -109,7 +113,8 @@ mod rand_string_tests {
 
 #[cfg(test)]
 mod string_match_tests {
-    use bt_string_utils::contains_whole_word;
+    use bt_string_utils::finder::contains_whole_word;
+
 
     #[test]
     fn test_exact_match() {
@@ -174,7 +179,8 @@ mod string_match_tests {
 
 #[cfg(test)]
 mod string_break_tests {
-    use bt_string_utils::split_upto_n_by_word;
+    use bt_string_utils::splitter::split_upto_n_by_word;
+
 
     #[test]
     fn splits_simple_ascii() {
@@ -262,9 +268,9 @@ mod string_break_tests {
 
 #[cfg(test)]
 mod remove_tags_tests {
-    use bt_string_utils::remove_tags;
+    use bt_string_utils::cleanser::remove_tags;
 
-    
+   
 
     #[test]
     fn empty_string() {

@@ -1,6 +1,6 @@
 [package]
 name = "bt_string_utils"
-version = "0.2.13"
+version = "0.3.0"
 edition = "2024"
 authors = ["calvarez <calvarez@bachuetech.biz>"]
 description = "Basic string operations"
@@ -13,5 +13,5 @@ license = "GPL-3.0-only"
 
 
 [dependencies]
-rand = "0.10.0"
+rand = "0.10.1"
 regex = "1.12.3"

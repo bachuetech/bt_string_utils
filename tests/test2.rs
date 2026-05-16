@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod word_count_tests {
-    use bt_string_utils::lib2::word_count;
+    use bt_string_utils::analyzer::word_count;
 
 
     #[test]
@@ -57,7 +57,7 @@ mod word_count_tests {
 
 #[cfg(test)]
 mod count_paragraphs_tests {
-    use bt_string_utils::lib2::count_paragraphs;
+    use bt_string_utils::analyzer::count_paragraphs;
 
     #[test]
     fn single_paragraph_no_newline() {
@@ -134,7 +134,8 @@ mod count_paragraphs_tests {
 
 #[cfg(test)]
 mod split_chunk_tests {
-    use bt_string_utils::lib2::split_into_chunks;
+    use bt_string_utils::splitter::split_into_chunks;
+
 
     // The function to split content into chunks
     const CHUNK_SIZE_BYTES: usize = 30_000; // 30 KB (bytes per chunk)

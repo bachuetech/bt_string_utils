@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 /// Counts words in a string using rules that closely match
 ///
 /// Word does *not* simply split on spaces. Instead, it uses
@@ -20,7 +22,7 @@
 ///
 /// ### Examples
 /// ```
-/// use bt_string_utils::lib2::word_count;
+/// use bt_string_utils::analyzer::word_count;
 /// assert_eq!(word_count("Hello, world!"), 2);
 /// assert_eq!(word_count("state-of-the-art"), 1);
 /// assert_eq!(word_count("I'm here"), 2);
@@ -63,7 +65,7 @@ pub fn word_count(text: &str) -> usize {
 ///
 /// ### Examples
 /// ```
-/// use bt_string_utils::lib2::is_cjk;
+/// use bt_string_utils::analyzer::is_cjk;
 /// assert!(is_cjk('你'));
 /// assert!(!is_cjk('a'));
 /// assert!(is_cjk('你'));
@@ -85,6 +87,22 @@ pub fn is_cjk(c: char) -> bool {
     )
 }
 
+///Find different words in two similar string vectors and find the difference
+/// in the number of words.
+/// It is useful when there are two almost identical documents and minimal changes need to be verified
+pub fn word_diff_count(a: Vec<&str>, b: Vec<&str>) -> usize {
+    let mut count = HashMap::<&str, isize>::new();
+
+    for w in a {
+        *count.entry(w).or_insert(0) += 1;
+    }
+
+    for w in b {
+        *count.entry(w).or_insert(0) -= 1;
+    }
+
+    count.values().map(|v| v.abs() as usize).sum()
+}
 
 /// Counts paragraphs in a string using rules that match
 ///
@@ -101,7 +119,7 @@ pub fn is_cjk(c: char) -> bool {
 ///
 /// ### Examples
 /// ```
-/// use bt_string_utils::lib2::count_paragraphs;
+/// use bt_string_utils::analyzer::count_paragraphs;
 /// assert_eq!(count_paragraphs("Hello"), 1);
 /// assert_eq!(count_paragraphs("Hello\nWorld"), 2);
 /// assert_eq!(count_paragraphs("Line1\n\nLine3"), 3); // empty paragraph in the middle
@@ -128,64 +146,4 @@ pub fn count_paragraphs(text: &str) -> usize {
 
     // Otherwise: paragraphs = newlines + 1
     newline_count + 1
-}
-
-/// Splits a given string into multiple chunks of safe size while ensuring that UTF-8 multi-byte characters are not split.
-/// 
-/// This function takes a string and divides it into smaller chunks of `chunk_size_bytes` bytes or less, ensuring that each chunk ends 
-/// at a valid UTF-8 character boundary. This helps avoid issues with splitting multi-byte characters (such as emojis or non-Latin 
-/// characters), which can lead to invalid UTF-8 sequences. The chunks are returned as a `Vec<String>`, which contains the substrings 
-/// of the original content.
-/// 
-/// # Parameters
-/// 
-/// - `content`: A reference to a `str` containing the document or text data to be split into chunks. The string must be a valid UTF-8 string.
-/// - `chunk_size_bytes: usize`: Size of a chunk in bytes
-/// 
-/// # Returns
-/// 
-/// - `Vec<String>`: A vector of `String` instances, each containing one chunk of the original `content`. and the function ensures that no chunk is split in the middle of a multi-byte UTF-8 character.
-/// 
-/// # Behavior
-/// 
-/// The function processes the input string byte-by-byte and ensures that each chunk is of safe size and that multi-byte characters 
-/// are respected. The chunks are added to the result vector in order, with each chunk being a valid UTF-8 sequence.
-/// 
-/// # Example
-/// 
-/// ```rust
-/// use bt_string_utils::lib2::split_into_chunks;
-/// let document: &str = "Your 70k+ character document..."; // some long document content
-/// let chunks = split_into_chunks(document,5);
-/// for chunk in chunks {
-///     println!("{}", chunk);
-/// }
-/// ```
-/// 
-/// # Limitations
-/// 
-/// - The function will step backwards within the byte array if necessary to ensure that chunks don't break in the middle of a multi-byte character.
-/// - It is optimized to handle **UTF-8** encoded data correctly. 
-/// - If the input string is extremely short, only a single chunk will be returned.
-pub fn split_into_chunks(content: &str, chunk_size_bytes: usize) -> Vec<String> {
-    let mut chunks = Vec::new();
-    let bytes = content.as_bytes();
-    let mut offset = 0;
-
-    while offset < bytes.len() {
-        let end = (offset + chunk_size_bytes).min(bytes.len());
-
-        // Ensure UTF-8 boundaries (not cutting in the middle of a multi-byte character)
-        let mut valid_end = end;
-        while !std::str::from_utf8(&bytes[offset..valid_end]).is_ok() {
-            valid_end -= 1; // Step back to avoid splitting a multi-byte character
-        }
-
-        let chunk = String::from_utf8_lossy(&bytes[offset..valid_end]).to_string();
-        chunks.push(chunk);
-
-        offset = valid_end; // Move to the next chunk start position
-    }
-
-    chunks
 }
