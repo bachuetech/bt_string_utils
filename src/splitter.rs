@@ -39,39 +39,6 @@ pub fn get_first_of_split(s: &str, separator: &str) -> (String, String){
     }
 }
 
-/// Finds and returns the value corresponding to a given key in a vector of key-value pairs.
-///
-/// # Arguments
-///
-/// * `kv_pairs` - A reference to a vector of strings where each string represents a key-value pair separated by '='.
-/// * `key_to_find` - The key for which the corresponding value is to be found.
-///
-/// # Returns
-///
-/// Returns an `Option`:
-/// - `Some(value)` if a matching key is found, containing the value associated with that key.
-/// - `None` if no matching key is found.
-///
-/// # Examples
-///
-/// ```
-/// use bt_string_utils::splitter::find_value_by_key;
-/// let pairs = vec!["name=John".to_owned(), "age=30".to_owned(), "city=New York".to_owned()];
-/// assert_eq!(find_value_by_key(&pairs, "name"), Some("John".to_string()));
-/// assert_eq!(find_value_by_key(&pairs, "gender"), None);
-/// ```
-pub fn find_value_by_key(kv_pairs: &Vec<String>, key_to_find: &str) -> Option<String> {
-    for item in kv_pairs {
-        // Split the string at the '=' character
-        if let Some((key, value)) = item.split_once('=') {
-            if key == key_to_find {
-                return Some(value.to_owned());
-            }
-        }
-    }
-    None
-}
-
 /// Splits a string into at most `n` substrings, grouped by whole words.
 ///
 /// This function performs **word‑based splitting**, never character‑based.

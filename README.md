@@ -44,6 +44,8 @@ let content = get_first_of_split("First:Second:Third",":");
     * New functions initials_uppercase to extract initials from a String
 * 0.3.0
     * Breaking changes due to refactoring (finder, cleanser, splitter, analyzer). Update dependencies. Add function to get the first n chars.
+* 0.4.0
+    * Breaking change due to refactoring. Moving function find_value_by_key from splitter to finder
 
 ## License
 GPL-3.0-only

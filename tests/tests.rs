@@ -38,7 +38,7 @@ use bt_string_utils::splitter::get_first_of_split;
 //*************/
 #[cfg(test)]
 mod strings_test{
-    use bt_string_utils::splitter::find_value_by_key;
+    use bt_string_utils::finder::find_value_by_key;
 
 
     #[test]
