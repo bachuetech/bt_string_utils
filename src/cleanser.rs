@@ -103,12 +103,11 @@ pub fn remove_first_n_characters(s: &str, n: usize) -> &str {
 ///   This may contain zero, one, or multiple `<custom> ... </custom>`
 ///   tag pairs. The function treats tags literally and does not interpret
 ///   nested or malformed markup.
-/// * `open_tag: &str`
-///    The open tag (e.g. <custom>).  `<custom> ... </custom>`
-/// * `close_tag: &str`
-///    The close tag (e.g. </custom>). `<custom> ... </custom>`
+/// * `open_tag: &str` The open tag (e.g. <custom>).  `<custom> ... </custom>`
+/// 
+/// * `close_tag: &str` The close tag (e.g. </custom>). `<custom> ... </custom>`
+/// 
 /// # Behavior
-///
 /// - Every occurrence of `<custom>` starts a removal region.
 /// - The function removes everything from `<custom>` up to and including
 ///   the next `</custom>` tag.

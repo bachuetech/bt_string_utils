@@ -22,7 +22,6 @@ use regex::Regex;
 /// let result = get_first_occurrance("No separator here", ",");
 /// assert_eq!(result, "");
 /// ```
-
 pub fn get_first_occurrance(s: &str, separator: &str) -> String{
     if let Some(position) = s.find(separator){
         s[..position].to_owned()
@@ -174,11 +173,11 @@ pub fn initials_uppercase(input: &str) -> String {
 pub fn find_value_by_key(kv_pairs: &Vec<String>, key_to_find: &str) -> Option<String> {
     for item in kv_pairs {
         // Split the string at the '=' character
-        if let Some((key, value)) = item.split_once('=') {
-            if key == key_to_find {
+        if let Some((key, value)) = item.split_once('=') && 
+            key == key_to_find {
                 return Some(value.to_owned());
-            }
         }
+
     }
     None
 }

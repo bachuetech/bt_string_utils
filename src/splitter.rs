@@ -53,8 +53,7 @@ pub fn get_first_of_split(s: &str, separator: &str) -> (String, String){
 ///
 /// # Arguments
 /// * `s` — The input string to split.
-/// * `n` — The desired number of substrings. The function will never return
-///         more substrings than the number of words in `s`.
+/// * `n` — The desired number of substrings. The function will never return more substrings than the number of words in `s`.
 ///
 /// # Returns
 /// A `Vec<&str>` containing up to `n` substrings, each containing one or more
@@ -201,7 +200,7 @@ pub fn split_into_chunks(content: &str, chunk_size_bytes: usize) -> Vec<String> 
 
         // Ensure UTF-8 boundaries (not cutting in the middle of a multi-byte character)
         let mut valid_end = end;
-        while !std::str::from_utf8(&bytes[offset..valid_end]).is_ok() {
+        while std::str::from_utf8(&bytes[offset..valid_end]).is_err() {
             valid_end -= 1; // Step back to avoid splitting a multi-byte character
         }
 

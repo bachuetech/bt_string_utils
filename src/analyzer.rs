@@ -101,7 +101,8 @@ pub fn word_diff_count(a: Vec<&str>, b: Vec<&str>) -> usize {
         *count.entry(w).or_insert(0) -= 1;
     }
 
-    count.values().map(|v| v.abs() as usize).sum()
+    //Replacing v.abs() with: `v.unsigned_abs()` ( avoids panic when called on the MIN value.)
+    count.values().map(|v| v.unsigned_abs() ).sum()
 }
 
 /// Counts paragraphs in a string using rules that match
