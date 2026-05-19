@@ -47,7 +47,7 @@ pub fn word_count(text: &str) -> usize {
         }
 
         // Word treats CJK characters as individual words
-        if trimmed.chars().all(|c| is_cjk(c)) {
+        if trimmed.chars().all(is_cjk) {
             count += trimmed.chars().count();
             continue;
         }

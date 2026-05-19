@@ -93,7 +93,7 @@ pub fn get_first_n_chars(s: &str, n: usize) -> &str {
 /// ```
 /// use bt_string_utils::finder::get_last_n_chars;
 /// let s = "a💙b💛c";
-/// assert_eq!(last_n_chars_unicode(s, 2), "💛c");
+/// assert_eq!(get_last_n_chars(s, 2), "💛c");
 /// ```
 pub fn get_last_n_chars(s: &str, n: usize) -> &str {
     if n == 0 {
