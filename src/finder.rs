@@ -87,6 +87,36 @@ pub fn get_first_n_chars(s: &str, n: usize) -> &str {
     }
 }
 
+///Get last n chars of a str
+/// Returns a slice containing the last `n` Unicode characters of the input string.
+///
+/// # Examples
+/// ```
+/// use bt_string_utils::finder::get_last_n_chars;
+/// let s = "a💙b💛c";
+/// assert_eq!(last_n_chars_unicode(s, 2), "💛c");
+/// ```
+pub fn get_last_n_chars(s: &str, n: usize) -> &str {
+    if n == 0 {
+        return "";
+    }
+
+    let mut iter = s.char_indices().rev();
+    let mut start = 0;
+
+    for _ in 0..n {
+        if let Some((idx, _)) = iter.next() {
+            start = idx;
+        } else {
+            start = 0;
+            break;
+        }
+    }
+
+    &s[start..]
+}
+
+
 /// Extracts the first letter of every word in a string and returns
 /// the collected initials in uppercase.
 ///

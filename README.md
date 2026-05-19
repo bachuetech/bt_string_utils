@@ -46,6 +46,8 @@ let content = get_first_of_split("First:Second:Third",":");
     * Breaking changes due to refactoring (finder, cleanser, splitter, analyzer). Update dependencies. Add function to get the first n chars.
 * 0.4.0
     * Breaking change due to refactoring. Moving function find_value_by_key from splitter to finder
+* 0.4.1
+    * Add function get_last_n_chars from a str.
 
 ## License
 GPL-3.0-only

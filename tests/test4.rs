@@ -1,6 +1,6 @@
 #[cfg(test)]
-mod first_n_tests {
-    use bt_string_utils::finder::get_first_n_chars;
+mod finder_n_tests {
+    use bt_string_utils::finder::{get_first_n_chars, get_last_n_chars};
 
 
     #[test]
@@ -112,4 +112,51 @@ mod first_n_tests {
 
         assert_eq!(get_first_n_chars(s, 2), "a\u{200B}");
     }
+
+
+    #[test]
+    fn test_ascii_basic() {
+        let s = "HelloWorld";
+        assert_eq!(get_last_n_chars(s, 5), "World");
+        assert_eq!(get_last_n_chars(s, 1), "d");
+        assert_eq!(get_last_n_chars(s, 0), "");
+    }
+
+    #[test]
+    fn test_unicode_basic() {
+        let s = "a💙b💛c";
+        assert_eq!(get_last_n_chars(s, 1), "c");
+        assert_eq!(get_last_n_chars(s, 2), "💛c");
+        assert_eq!(get_last_n_chars(s, 3), "b💛c");
+        assert_eq!(get_last_n_chars(s, 4), "💙b💛c");
+    }
+
+    #[test]
+    fn test_unicode_entire_string() {
+        let s = "💙💛💚";
+        assert_eq!(get_last_n_chars(s, 3), "💙💛💚");
+        assert_eq!(get_last_n_chars(s, 10), "💙💛💚"); // n > len
+    }
+
+    #[test]
+    fn test_empty_string() {
+        let s = "";
+        assert_eq!(get_last_n_chars(s, 5), "");
+        assert_eq!(get_last_n_chars(s, 0), "");
+    }
+
+    #[test]
+    fn test_mixed_unicode_and_ascii() {
+        let s = "Rust💙Rocks💛!";
+        assert_eq!(get_last_n_chars(s, 1), "!");
+        assert_eq!(get_last_n_chars(s, 2), "💛!");
+        assert_eq!(get_last_n_chars(s, 7), "Rocks💛!");
+    }
+
+    #[test]
+    fn test_exact_boundary() {
+        let s = "abc💙";
+        assert_eq!(get_last_n_chars(s, 4), "abc💙");
+        assert_eq!(get_last_n_chars(s, 3), "bc💙");
+    }    
 }
