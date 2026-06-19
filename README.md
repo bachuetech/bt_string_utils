@@ -49,7 +49,9 @@ let content = get_first_of_split("First:Second:Third",":");
 * 0.4.1
     * Add function get_last_n_chars from a str.
 * 0.4.2
-    * Minor changes to improve performance and code clarity.    
+    * Minor changes to improve performance and code clarity. 
+* 0.4.3
+    *  Update dependency      
 
 ## License
 GPL-3.0-only
